@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, LoginUserDto } from './dto/index.dto';
 import { User, UserDocument } from './schema/user.schema';
 import { passwordHashing } from "./utils/hashPassword.utils";
 
@@ -13,9 +11,14 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
   async register(createUserDto: CreateUserDto): Promise<User> {
-    createUserDto.password = await passwordHashing.generateHash(createUserDto.password)
-    const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
+    try {
+      createUserDto.password = await passwordHashing.generateHash(createUserDto.password)
+      const createdUser = new this.userModel(createUserDto);
+      const user = await createdUser.save();
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async login(reqUser: LoginUserDto): Promise<User> {

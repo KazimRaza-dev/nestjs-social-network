@@ -17,7 +17,7 @@ import { PostModule } from './post/post.module';
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
       }),
-      inject: [ConfigService], 
+      inject: [ConfigService],
     }),
     UserModule,
     PostModule,
