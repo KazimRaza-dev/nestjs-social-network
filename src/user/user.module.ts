@@ -5,16 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user.schema';
 import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { registerJWT } from 'src/auth/utils/registerJwt';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    JwtModule.register({
-      secret: `${process.env.JWT_PRIVATE_KEY}`,
-      signOptions: {
-        expiresIn: "5h"
-      },
-    })
+    JwtModule.register(registerJWT)
   ],
   controllers: [UserController],
   providers: [UserService]

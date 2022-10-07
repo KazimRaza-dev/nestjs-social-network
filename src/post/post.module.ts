@@ -5,15 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './schema/post.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
+import { registerJWT } from 'src/auth/utils/registerJwt';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-  JwtModule.register({
-    secret: `${process.env.JWT_PRIVATE_KEY}`,
-    signOptions: {
-      expiresIn: "5h"
-    },
-  })],
+  imports: [
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    JwtModule.register(registerJWT)
+  ],
   controllers: [PostController],
   providers: [PostService]
 })

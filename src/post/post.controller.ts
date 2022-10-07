@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from "./dto/update-post.dto";
@@ -13,8 +13,9 @@ export class PostController {
   constructor(private readonly postService: PostService,) { }
 
   @Post()
-  @UsePipes(new JoiValidationPipe(createPostSchema))
-  async create(@ReqUser() user: ReqUserDto, @Body() createPostDto: CreatePostDto) {
+  async create(
+    @ReqUser() user: ReqUserDto,
+    @Body(new JoiValidationPipe(createPostSchema)) createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto, user.id);
   }
 
@@ -29,8 +30,10 @@ export class PostController {
   }
 
   @Patch(':id')
-  @UsePipes(new JoiValidationPipe(updatePostSchema))
-  update(@ReqUser() user: ReqUserDto, @Param('id') postId: string, @Body() updatePostDto: UpdatePostDto) {
+  update(
+    @ReqUser() user: ReqUserDto,
+    @Param('id') postId: string,
+    @Body(new JoiValidationPipe(updatePostSchema)) updatePostDto: UpdatePostDto) {
     return this.postService.update(user.id, postId, updatePostDto);
   }
 
