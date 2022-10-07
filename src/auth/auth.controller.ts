@@ -11,7 +11,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res: Response): Promise<void> {
     const jwtAccessToken = await this.authService.register(createUserDto);
-    res.status(200).header('x-auth-token', jwtAccessToken).send({
+    res.status(200).status(200).header('x-auth-token', jwtAccessToken).send({
       message: "User successfully Registered."
     });
   }
@@ -19,7 +19,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUser: LoginUserDto, @Res() res: Response): Promise<void> {
     const jwtAccessToken = await this.authService.login(loginUser);
-    res.status(200).header('x-auth-token', jwtAccessToken).send({
+    res.status(200).status(200).header('x-auth-token', jwtAccessToken).send({
       message: "User successfully log In."
     });
   }
