@@ -13,11 +13,7 @@ export class PostService {
 
   async create(createPostDto: CreatePostDto, userId: string): Promise<Post> {
     createPostDto.userId = userId;
-    console.log("post careing");
-
     const post = new this.postModel(createPostDto);
-    console.log("post created");
-
     return post.save();
   }
 

@@ -13,7 +13,8 @@ import { registerJWT } from 'src/auth/utils/registerJwt';
     JwtModule.register(registerJWT)
   ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
+  exports: [MongooseModule]
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
