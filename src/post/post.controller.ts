@@ -1,21 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from "./dto/update-post.dto";
-import { ReqUserEntity } from "../user/dto/req-user.dto";
-import { User } from '../user/dacorator/user.dacorator';
+import { ReqUserDto } from "../user/dto/req-user.dto";
+import { ReqUser } from '../user/dacorator/user.dacorator';
+import { JoiValidationPipe } from 'src/auth/pipes/validation.pipe';
+import { createPostSchema } from './joi-schemas/createPostSchema.schema';
+import { updatePostSchema } from './joi-schemas/updatePost.schema';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService,) { }
 
   @Post()
-  async create(@User() user: ReqUserEntity, @Body() createPostDto: CreatePostDto) {
+  @UsePipes(new JoiValidationPipe(createPostSchema))
+  async create(@ReqUser() user: ReqUserDto, @Body() createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto, user.id);
   }
 
   @Get()
-  findAll(@User() user: ReqUserEntity) {
+  findAll(@ReqUser() user: ReqUserDto) {
     return this.postService.findAll(user.id);
   }
 
@@ -25,12 +29,13 @@ export class PostController {
   }
 
   @Patch(':id')
-  update(@User() user: ReqUserEntity, @Param('id') postId: string, @Body() updatePostDto: UpdatePostDto) {
+  @UsePipes(new JoiValidationPipe(updatePostSchema))
+  update(@ReqUser() user: ReqUserDto, @Param('id') postId: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(user.id, postId, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@User() user: ReqUserEntity, @Param('id') postId: string) {
+  remove(@ReqUser() user: ReqUserDto, @Param('id') postId: string) {
     return this.postService.remove(user.id, postId);
   }
 }
