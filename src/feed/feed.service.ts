@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaymentService } from 'src/payment/payment.service';
 import { ResponseMessage } from 'src/post/dto/response.dto';
-import { Post, PostDocument } from 'src/post/schema/post.schema';
+import { SocialPost, PostDocument } from 'src/post/schema/post.schema';
 import { User, UserDocument } from 'src/user/schema/user.schema';
 import { FeedQuery } from './dto/query-feed.dto';
 
@@ -11,12 +11,12 @@ import { FeedQuery } from './dto/query-feed.dto';
 export class FeedService {
 
   constructor(
-    @InjectModel(Post.name) private postModel: Model<PostDocument>,
+    @InjectModel(SocialPost.name) private postModel: Model<PostDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly paymentService: PaymentService
   ) { }
 
-  async showSocialFeed(userId: string, queryParam: FeedQuery): Promise<Post[] | ResponseMessage> {
+  async showSocialFeed(userId: string, queryParam: FeedQuery): Promise<SocialPost[] | ResponseMessage> {
     const alreadyPaid = await this.paymentService.isAlreadyPaid(userId);
     if (!alreadyPaid) {
       return { message: "Social feed is restricted to paid users only. Make payment first." }
@@ -44,7 +44,7 @@ export class FeedService {
     return { pgNo, pageSize, sortBy, order }
   }
 
-  async getFeed(followingUsers: string[], queryParam): Promise<Post[]> {
+  async getFeed(followingUsers: string[], queryParam): Promise<SocialPost[]> {
     const sortOrder = queryParam.order === "asc" ? 1 : -1;
     const skip: number = (queryParam.pgNo - 1) * queryParam.pageSize;
     return this.postModel.find({ "userId": { "$in": followingUsers } })
