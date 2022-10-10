@@ -7,17 +7,16 @@ import { User } from './schema/user.schema';
 import { RolesGuard } from './guard/role.guard';
 
 @Controller('user')
+@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Patch('follow/:id')
-  @UseGuards(RolesGuard)
   followUser(@ReqUser() user: ReqUserDto, @Param('id') followUserId: string): Promise<User> {
     return this.userService.followUser(user.id, followUserId);
   }
 
   @Patch('unfollow/:id')
-  @UseGuards(RolesGuard)
   unfollowUser(@ReqUser() user: ReqUserDto, @Param('id') followingUserId: string): Promise<ResponseMessage> {
     return this.userService.unfollowUser(user.id, followingUserId);
   }
