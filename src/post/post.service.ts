@@ -31,18 +31,25 @@ export class PostService {
   }
 
   /**
-   * Give all posts of a user
+   * Give posts of a user after paginating the records
    * 
-   * @param userId Id of logged in user 
+   * @param userId Id of logged in user
+   * @param pageNo Page number for pagination
+   * @param size Number of records per page
    * @returns list of all posts of user
    */
-  async findAll(userId: string): Promise<SocialPost[] | ResponseMessage> {
-    const posts = await this.postModel.find({ userId: userId });
+  async findAll(userId: string, pageNo: string, size: string): Promise<SocialPost[] | ResponseMessage> {
+    const pgNo = pageNo && parseInt(pageNo);
+    const pageSize = size && parseInt(size);
+    const skip: number = (pgNo - 1) * pageSize;
+
+    const posts = await this.postModel.find({ userId: userId })
+      .skip(skip).limit(pageSize);
     if (posts.length > 0) {
       return posts;
     }
     return {
-      message: "No post exists for this user"
+      message: "No more post exists for this user"
     }
   }
 
