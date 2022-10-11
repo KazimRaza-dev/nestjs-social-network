@@ -6,11 +6,13 @@ import { SocialPost, PostSchema } from './schema/post.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
 import { registerJWT } from 'src/auth/utils/registerJwt';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: SocialPost.name, schema: PostSchema }]),
-    JwtModule.register(registerJWT)
+    JwtModule.register(registerJWT),
+    EventsModule
   ],
   controllers: [PostController],
   providers: [PostService],

@@ -16,6 +16,13 @@ export class FeedService {
     private readonly paymentService: PaymentService
   ) { }
 
+  /**
+   * Show social feed to a user
+   * 
+   * @param userId Id of logged in user
+   * @param queryParam Query string paramters object
+   * @returns Social feed for a user
+   */
   async showSocialFeed(userId: string, queryParam: FeedQuery): Promise<SocialPost[] | ResponseMessage> {
     const alreadyPaid = await this.paymentService.isAlreadyPaid(userId);
     if (!alreadyPaid) {
@@ -30,11 +37,24 @@ export class FeedService {
     return feed;
   }
 
+  /**
+   * Give all followings of a user
+   * 
+   * @param userId Id of user
+   * @returns Users list a particular user is following
+   */
   async getFollowing(userId: string): Promise<string[]> {
     const user = await this.userModel.findById(userId);
     return user.following;
   }
 
+  /**
+   * This method assign default values to query string paramaters if user does not provide their values And also
+   * convert page number and size to integer if user provides these paramters
+   * 
+   * @param queryParam Object of query string paramter  
+   * @returns New query string paramter object
+   */
   assignDefaultValues(queryParam: FeedQuery) {
     let { pageNo, size, sortBy, order } = queryParam;
     const pgNo = pageNo ? parseInt(pageNo) : 1;
@@ -44,6 +64,13 @@ export class FeedService {
     return { pgNo, pageSize, sortBy, order }
   }
 
+  /**
+   * Return list of posts to a user after applying query string paramters
+   * 
+   * @param followingUsers List of users a user is following
+   * @param queryParam Query string paramters
+   * @returns List of posts to show in feed
+   */
   async getFeed(followingUsers: string[], queryParam): Promise<SocialPost[]> {
     const sortOrder = queryParam.order === "asc" ? 1 : -1;
     const skip: number = (queryParam.pgNo - 1) * queryParam.pageSize;

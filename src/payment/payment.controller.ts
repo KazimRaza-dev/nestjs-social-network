@@ -19,9 +19,7 @@ export class PaymentController {
     @Query('userId') userId: string,
     @Query('session_id') sessionId: string
   ) {
-    if (!userId) {
-      throw new ForbiddenException('You need to make payment first.')
-    }
+
     return this.paymentService.paymentSuccess(userId, sessionId);
   }
 
@@ -29,6 +27,5 @@ export class PaymentController {
   async paymentFailure() {
     return this.paymentService.paymentFailed();
   }
-
 
 }

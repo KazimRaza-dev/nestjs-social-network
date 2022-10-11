@@ -8,6 +8,7 @@ import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
 import { FeedModule } from './feed/feed.module';
 import { PaymentModule } from './payment/payment.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { PaymentModule } from './payment/payment.module';
     AuthModule,
     FeedModule,
     PaymentModule,
-
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],

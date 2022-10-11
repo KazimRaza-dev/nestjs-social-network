@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { EventsGateway } from 'src/events/events.gateway';
 import { CreatePostDto } from './dto/create-post.dto';
 import { ResponseMessage } from './dto/response.dto';
 import { UpdatePostDto } from "./dto/update-post.dto";
@@ -9,14 +10,32 @@ import { SocialPost, PostDocument } from './schema/post.schema';
 @Injectable()
 export class PostService {
 
-  constructor(@InjectModel(SocialPost.name) private postModel: Model<PostDocument>) { }
+  constructor(@InjectModel(SocialPost.name) private postModel: Model<PostDocument>,
+    private readonly eventGateway: EventsGateway
+  ) { }
 
+  /**
+   * Create a new post
+   * 
+   * @param createPostDto Post data to be added
+   * @param userId Id of logged In user
+   * @returns Succuess message after adding the post to database
+   */
   async create(createPostDto: CreatePostDto, userId: string): Promise<SocialPost> {
     createPostDto.userId = userId;
     const post = new this.postModel(createPostDto);
+    if (post) {
+      this.eventGateway.sendPostToRoom(userId, post)
+    }
     return post.save();
   }
 
+  /**
+   * Give all posts of a user
+   * 
+   * @param userId Id of logged in user 
+   * @returns list of all posts of user
+   */
   async findAll(userId: string): Promise<SocialPost[] | ResponseMessage> {
     const posts = await this.postModel.find({ userId: userId });
     if (posts.length > 0) {
@@ -27,6 +46,12 @@ export class PostService {
     }
   }
 
+  /**
+   * Get single post by passing its Id
+   * 
+   * @param postId Id of post that user wants to get
+   * @returns Post if it exists else failure message
+   */
   async findOne(postId: string): Promise<SocialPost | ResponseMessage> {
     const post = await this.postModel.findById(postId)
     if (post) return post;
@@ -35,6 +60,15 @@ export class PostService {
     }
   }
 
+  /**
+   * Update the already existing post
+   * 
+   * @param userId Id of logged in user
+   * @param userRole Role of current user, either user or moderator
+   * @param postId Id of the post to be updated
+   * @param updatePostDto Fields to be updated
+   * @returns 
+   */
   async update(userId: string, userRole: string, postId: string, updatePostDto: UpdatePostDto): Promise<SocialPost | ResponseMessage> {
     const canEdit = await this.checkUserAcces(userId, userRole, postId);
     if (!canEdit) {
@@ -48,6 +82,14 @@ export class PostService {
     return { message: `Post with id ${postId} does not exists.` }
   }
 
+  /**
+   * Delete already existing post
+   * 
+   * @param userId Id of logged in user
+   * @param userRole Role of current user, either user or moderator
+   * @param postId Id of post to be deleted
+   * @returns Succuess message if the post is deleted else failure message
+   */
   async remove(userId: string, userRole: string, postId: string): Promise<ResponseMessage> {
     const canDelete = await this.checkUserAcces(userId, userRole, postId);
     if (!canDelete) {
@@ -59,6 +101,13 @@ export class PostService {
     return { message: `Post with id ${postId} does not exists.` }
   }
 
+  /**
+   * Check if the user is owner of this post or Not
+   * @param userId Id of logged in user
+   * @param userRole Role of user
+   * @param postId Id of post
+   * @returns True if the user is owner of the post else false
+   */
   async checkUserAcces(userId: string, userRole: string, postId: string): Promise<boolean> {
     if (userRole === "moderator") {
       return true;
@@ -70,6 +119,13 @@ export class PostService {
     return false;
   }
 
+  /**
+   * Like any existing post
+   * 
+   * @param userId Id of logged in user
+   * @param postId Id of post to be liked
+   * @returns Post with updated likes list else error message
+   */
   async likePost(userId: string, postId: string): Promise<SocialPost | ResponseMessage> {
     const isPostExists = await this.checkPostExists(postId);
     if (!isPostExists) {
@@ -86,6 +142,13 @@ export class PostService {
     }, { new: true });
   }
 
+  /**
+   * Dislike any existing post
+   * 
+   * @param userId Id of logged in user
+   * @param postId Id of post to be disliked
+   * @returns Post with updated dislikes list else error message
+   */
   async dislikePost(userId: string, postId: string): Promise<SocialPost | ResponseMessage> {
     const isPostExists = await this.checkPostExists(postId);
     if (!isPostExists) {
@@ -102,10 +165,23 @@ export class PostService {
     }, { new: true });
   }
 
+  /**
+   * Check if specific post exists or not
+   * 
+   * @param postId Id of post 
+   * @returns Post if it exists
+   */
   async checkPostExists(postId: string): Promise<SocialPost> {
     return this.postModel.findById(postId);
   }
 
+  /**
+   * Check if a post is already liked by logged in user 
+   * 
+   * @param postId Id of post to check
+   * @param userId Id of logged in user
+   * @returns Post document if it's already liked
+   */
   async isAlreadyLiked(postId: string, userId: string): Promise<SocialPost> {
     return this.postModel.findOneAndUpdate(
       { _id: postId, "likes": { $in: [userId] } },
@@ -113,6 +189,13 @@ export class PostService {
     )
   }
 
+  /**
+   * Check if a post is already disliked by logged in user 
+   * 
+   * @param postId Id of post to check
+   * @param userId Id of logged in user
+   * @returns Post document if it's already disliked
+   */
   async isAlreadyDisliked(postId: string, userId: string): Promise<SocialPost> {
     return this.postModel.findOneAndUpdate(
       { _id: postId, "dislikes": { $in: [userId] } },
