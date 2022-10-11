@@ -13,7 +13,6 @@ import { SocialPost } from 'src/post/schema/post.schema';
     cors: { origin: '*', },
 })
 export class EventsGateway {
-
     constructor(@Inject(forwardRef(() => UserService)) private userService: UserService) { }
 
     @WebSocketServer()

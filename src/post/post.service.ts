@@ -68,13 +68,13 @@ export class PostService {
   }
 
   /**
-   * Update the already existing post
+   * Update already existing post
    * 
    * @param userId Id of logged in user
    * @param userRole Role of current user, either user or moderator
    * @param postId Id of the post to be updated
    * @param updatePostDto Fields to be updated
-   * @returns 
+   * @returns Updated post if the post is updated else failure message
    */
   async update(userId: string, userRole: string, postId: string, updatePostDto: UpdatePostDto): Promise<SocialPost | ResponseMessage> {
     const canEdit = await this.checkUserAcces(userId, userRole, postId);
@@ -209,5 +209,4 @@ export class PostService {
       { $pull: { dislikes: userId } }, { new: true }
     )
   }
-
 }

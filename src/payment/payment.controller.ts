@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { ReqUserDto } from 'src/user/dto/req-user.dto';
 import { ReqUser } from 'src/user/dacorator/user.dacorator';
@@ -19,7 +19,6 @@ export class PaymentController {
     @Query('userId') userId: string,
     @Query('session_id') sessionId: string
   ) {
-
     return this.paymentService.paymentSuccess(userId, sessionId);
   }
 
@@ -27,5 +26,4 @@ export class PaymentController {
   async paymentFailure() {
     return this.paymentService.paymentFailed();
   }
-
 }

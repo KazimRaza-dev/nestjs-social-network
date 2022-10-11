@@ -4,14 +4,20 @@ import { Model } from 'mongoose';
 import Stripe from 'stripe';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Payment, PaymentDocument } from './schema/payment.schema';
-
-const stripe = new Stripe("sk_test_51Ljzs8ANwplLurwbt5nomoWTZVnV9935soRAuEoEi7SW3OY5KSxU7WWnM1MHpaG1I2hI6QoIUp3oXVd71eOWVDIR001rPmgFCh", {
-  apiVersion: '2022-08-01'
-});
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PaymentService {
-  constructor(@InjectModel(Payment.name) private paymentModel: Model<PaymentDocument>) { }
+  private stripe: Stripe;
+
+  constructor(
+    @InjectModel(Payment.name) private paymentModel: Model<PaymentDocument>,
+    private configService: ConfigService
+  ) {
+    this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'), {
+      apiVersion: '2022-08-01'
+    });
+  }
 
   /**
    * Generate stripe checkout URL for making payment
@@ -48,7 +54,7 @@ export class PaymentService {
    */
   async createStripeSession(userId: string, price: number) {
     try {
-      const session = await stripe.checkout.sessions.create({
+      const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
         line_items: [
@@ -83,7 +89,7 @@ export class PaymentService {
     if (!userId) {
       throw new ForbiddenException('You need to make payment first.')
     }
-    const session = await stripe.checkout.sessions.retrieve(sessionId)
+    const session = await this.stripe.checkout.sessions.retrieve(sessionId)
     const paymentSuccess = await this.savePayment(session, userId)
     if (paymentSuccess) {
       return { message: "Payment succeed. Now you can enjoy social feed." }
