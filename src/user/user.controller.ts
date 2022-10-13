@@ -1,11 +1,13 @@
-import { Controller, Param, Patch } from '@nestjs/common';
+import { Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { ResponseMessage } from 'src/post/dto/response.dto';
 import { ReqUser } from './dacorator/user.dacorator';
 import { ReqUserDto } from './dto/req-user.dto';
 import { UserService } from './user.service';
 import { User } from './schema/user.schema';
+import { RolesGuard } from './guard/role.guard';
 
 @Controller('user')
+@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

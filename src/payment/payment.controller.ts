@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { ReqUserDto } from 'src/user/dto/req-user.dto';
 import { ReqUser } from 'src/user/dacorator/user.dacorator';
+import { RolesGuard } from 'src/user/guard/role.guard';
 
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) { }
 
   @Post()
+  @UseGuards(RolesGuard)
   async makePayment(@ReqUser() user: ReqUserDto) {
     return this.paymentService.makePayment(user.id);
   }
@@ -17,6 +19,9 @@ export class PaymentController {
     @Query('userId') userId: string,
     @Query('session_id') sessionId: string
   ) {
+    if (!userId) {
+      throw new ForbiddenException('You need to make payment first.')
+    }
     return this.paymentService.paymentSuccess(userId, sessionId);
   }
 

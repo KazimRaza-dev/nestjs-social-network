@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { User } from "src/user/schema/user.schema";
 
-export type PostDocument = Post & Document;
+export type PostDocument = SocialPost & Document;
 
 @Schema({ timestamps: true })
-export class Post {
+export class SocialPost {
 
     @Prop({ required: true, type: String })
     title: string;
@@ -23,4 +23,4 @@ export class Post {
     dislikes: string[];
 }
 
-export const PostSchema = SchemaFactory.createForClass(Post);
+export const PostSchema = SchemaFactory.createForClass(SocialPost);
