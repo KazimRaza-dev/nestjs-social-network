@@ -6,6 +6,7 @@ export type PostDocument = Post & Document;
 
 @Schema({ timestamps: true })
 export class Post {
+
     @Prop({ required: true, type: String })
     title: string;
 
