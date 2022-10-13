@@ -6,11 +6,12 @@ import { registerJWT } from 'src/auth/utils/registerJwt';
 import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
 import { PostModule } from 'src/post/post.module';
 import { UserModule } from 'src/user/user.module';
+import { PaymentModule } from 'src/payment/payment.module';
 
 @Module({
   imports: [
     JwtModule.register(registerJWT),
-    PostModule, UserModule
+    PostModule, UserModule, PaymentModule
   ],
   controllers: [FeedController],
   providers: [FeedService]
