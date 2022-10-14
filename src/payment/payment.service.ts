@@ -50,7 +50,7 @@ export class PaymentService {
    * 
    * @param userId Id of user
    * @param price Amount of money to pay
-   * @returns Session object after assigning its paramters
+   * @returns Session object after assigning its parameters
    */
   async createStripeSession(userId: string, price: number) {
     try {

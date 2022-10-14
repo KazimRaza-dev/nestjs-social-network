@@ -19,7 +19,7 @@ export class PostService {
    * 
    * @param createPostDto Post data to be added
    * @param userId Id of logged In user
-   * @returns Succuess message after adding the post to database
+   * @returns Succuss message after adding the post to database
    */
   async create(createPostDto: CreatePostDto, userId: string): Promise<SocialPost> {
     createPostDto.userId = userId;

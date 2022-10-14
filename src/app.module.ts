@@ -14,8 +14,8 @@ import { EventsModule } from './events/events.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: ['.development.env'],   //envirnment variables file for developemnt
-      envFilePath: ['.production.env'],       //envirnment variables file for production/deploy
+      // envFilePath: ['.development.env'],   //environment variables file for development
+      envFilePath: ['.production.env'],       //environment variables file for production/deploy
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

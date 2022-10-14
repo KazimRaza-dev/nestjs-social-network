@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   /**
-   * Check if log-in credientials are valid or not. If user successfully logged in then return a JWT token
+   * Check if log-in credentials are valid or not. If user successfully logged in then return a JWT token
    * 
    * @param reqUser Request object that contains email, password and role passed by user  
    * @returns JWT token if user successfully logged In

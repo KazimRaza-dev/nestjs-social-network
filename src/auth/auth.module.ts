@@ -8,7 +8,7 @@ import { registerJWT } from './utils/registerJwt';
 
 @Module({
   imports:
-    [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, ,]),
+    [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register(registerJWT),],
   controllers: [AuthController],
   providers: [AuthService]
