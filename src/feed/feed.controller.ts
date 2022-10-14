@@ -6,13 +6,15 @@ import { FeedQuery } from './dto/query-feed.dto';
 import { SocialPost } from 'src/post/schema/post.schema';
 import { ResponseMessage } from 'src/post/dto/response.dto';
 import { RolesGuard } from 'src/user/guard/role.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('feed')
+@UseGuards(RolesGuard)
+@UseGuards(JwtAuthGuard)
 export class FeedController {
   constructor(private readonly feedService: FeedService) { }
 
   @Get()
-  @UseGuards(RolesGuard)
   showFeed(
     @ReqUser() user: ReqUserDto,
     @Query() query: FeedQuery

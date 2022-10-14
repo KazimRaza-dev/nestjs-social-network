@@ -1,11 +1,10 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { PaymentController } from './payment.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { registerJWT } from 'src/auth/utils/registerJwt';
 import { Payment, PaymentSchema } from './schema/payment.schema';
-import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -16,10 +15,4 @@ import { JwtAuthMiddleware } from 'src/auth/middleware/auth.middleware';
   providers: [PaymentService],
   exports: [PaymentService]
 })
-export class PaymentModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtAuthMiddleware)
-      .forRoutes({ path: 'payment', method: RequestMethod.POST });
-  }
-}
+export class PaymentModule { }

@@ -7,6 +7,7 @@ import { ReqUser } from '../user/dacorator/user.dacorator';
 import { RolesGuard } from 'src/user/guard/role.guard';
 import { ResponseMessage } from './dto/response.dto';
 import { SocialPost } from './schema/post.schema';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('post')
 export class PostController {
@@ -14,6 +15,7 @@ export class PostController {
 
   @Post()
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   async create(
     @ReqUser() user: ReqUserDto,
     @Body() createPostDto: CreatePostDto): Promise<SocialPost> {
@@ -21,6 +23,7 @@ export class PostController {
   }
 
   @Get('/all/:id')
+  @UseGuards(JwtAuthGuard)
   async findAll(@Param('id') userId: string,
     @Query('pageNo', new DefaultValuePipe("1")) pageNo: string,
     @Query('size', new DefaultValuePipe("5")) size: string
@@ -30,11 +33,13 @@ export class PostController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') postId: string): Promise<SocialPost | ResponseMessage> {
     return this.postService.findOne(postId);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(
     @ReqUser() user: ReqUserDto,
     @Param('id') postId: string,
@@ -44,18 +49,21 @@ export class PostController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@ReqUser() user: ReqUserDto, @Param('id') postId: string): Promise<ResponseMessage> {
     return this.postService.remove(user.id, user.role, postId);
   }
 
   @Patch('/like/:id')
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   async likePost(@ReqUser() user: ReqUserDto, @Param('id') postId: string): Promise<SocialPost | ResponseMessage> {
     return this.postService.likePost(user.id, postId)
   }
 
   @Patch('/dislike/:id')
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   async dislikePost(@ReqUser() user: ReqUserDto, @Param('id') postId: string): Promise<SocialPost | ResponseMessage> {
     return this.postService.dislikePost(user.id, postId)
   }

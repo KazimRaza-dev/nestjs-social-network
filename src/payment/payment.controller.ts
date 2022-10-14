@@ -3,6 +3,7 @@ import { PaymentService } from './payment.service';
 import { ReqUserDto } from 'src/user/dto/req-user.dto';
 import { ReqUser } from 'src/user/dacorator/user.dacorator';
 import { RolesGuard } from 'src/user/guard/role.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('payment')
 export class PaymentController {
@@ -10,6 +11,7 @@ export class PaymentController {
 
   @Post()
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   async makePayment(@ReqUser() user: ReqUserDto) {
     return this.paymentService.makePayment(user.id);
   }
