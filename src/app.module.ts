@@ -14,8 +14,8 @@ import { EventsModule } from './events/events.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: ['.development.env'],   //environment variables file for development
-      envFilePath: ['.production.env'],       //environment variables file for production/deploy
+      envFilePath: [`.${process.env.NODE_ENV}.env`],      //choose dynamic .env file based on the envirnment on
+      // which the app is running - development or production.
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
