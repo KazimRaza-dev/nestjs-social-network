@@ -1,18 +1,30 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import Stripe from 'stripe';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Payment, PaymentDocument } from './schema/payment.schema';
-
-const stripe = new Stripe("sk_test_51Ljzs8ANwplLurwbt5nomoWTZVnV9935soRAuEoEi7SW3OY5KSxU7WWnM1MHpaG1I2hI6QoIUp3oXVd71eOWVDIR001rPmgFCh", {
-  apiVersion: '2022-08-01'
-});
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PaymentService {
-  constructor(@InjectModel(Payment.name) private paymentModel: Model<PaymentDocument>) { }
+  private stripe: Stripe;
 
+  constructor(
+    @InjectModel(Payment.name) private paymentModel: Model<PaymentDocument>,
+    private configService: ConfigService
+  ) {
+    this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'), {
+      apiVersion: '2022-08-01'
+    });
+  }
+
+  /**
+   * Generate stripe checkout URL for making payment
+   * 
+   * @param userId Id of user making the payment
+   * @returns Stripe checkout url after creating stripe session
+   */
   async makePayment(userId: string) {
     const alreadyPaid = await this.isAlreadyPaid(userId);
     if (alreadyPaid) {
@@ -23,13 +35,26 @@ export class PaymentService {
     return { url: session.url }
   }
 
+  /**
+   * Check if particular user has already paid or not
+   * 
+   * @param userId Id of user
+   * @returns Payment object if the user has already paid
+   */
   async isAlreadyPaid(userId: string) {
     return this.paymentModel.findOne({ userId: userId });
   }
 
+  /**
+   * Create stripe session object to payment
+   * 
+   * @param userId Id of user
+   * @param price Amount of money to pay
+   * @returns Session object after assigning its paramters
+   */
   async createStripeSession(userId: string, price: number) {
     try {
-      const session = await stripe.checkout.sessions.create({
+      const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
         line_items: [
@@ -53,20 +78,40 @@ export class PaymentService {
     }
   }
 
+  /**
+   * Store payment records in database
+   *  
+   * @param userId If of user making payment
+   * @param sessionId Session object Id after making payment
+   * @returns Success message after storing payment records in database
+   */
   async paymentSuccess(userId: string, sessionId: string) {
-    const session = await stripe.checkout.sessions.retrieve(sessionId)
-    const paymentSuccess = await this.createPayment(session, userId)
+    if (!userId) {
+      throw new ForbiddenException('You need to make payment first.')
+    }
+    const session = await this.stripe.checkout.sessions.retrieve(sessionId)
+    const paymentSuccess = await this.savePayment(session, userId)
     if (paymentSuccess) {
       return { message: "Payment succeed. Now you can enjoy social feed." }
     }
     throw new BadRequestException()
   }
 
+  /**
+   * Show error message to user if payment failed
+   */
   paymentFailed() {
     throw new BadRequestException("Payment failed. Make correct payment in order to access social feed.");
   }
 
-  async createPayment(session, userId: string) {
+  /**
+   * Store a new payment in database
+   * 
+   * @param session Session object
+   * @param userId Id of user making payment
+   * @returns Payment object after storing data in DB
+   */
+  async savePayment(session, userId: string) {
     const newPayment: CreatePaymentDto = {
       stripeId: session.id, paymentEmail: session.customer_details.email,
       paymentName: session.customer_details.name, method: session.payment_method_types[0],
