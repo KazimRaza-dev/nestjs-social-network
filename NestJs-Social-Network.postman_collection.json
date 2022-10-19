@@ -1,0 +1,464 @@
+{
+	"info": {
+		"_postman_id": "72195a48-6025-4501-8821-1acdd927b651",
+		"name": "NestJs-Social-Network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23011762"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "follow user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDgwMDQ0LCJleHAiOjE2NjU0OTgwNDR9.BNPSw1X_sZXCey4eS-riakxNlA1HQOxnGOj8FLzUrRY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/user/follow/632066df1243c8b2c9995ee4",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"user",
+								"follow",
+								"632066df1243c8b2c9995ee4"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unfollow user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDgwMDQ0LCJleHAiOjE2NjU0OTgwNDR9.BNPSw1X_sZXCey4eS-riakxNlA1HQOxnGOj8FLzUrRY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/user/unfollow/632066df1243c8b2c9995ee4",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"user",
+								"unfollow",
+								"632066df1243c8b2c9995ee4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Play Games\",\n    \"description\": \"Playing football..\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post"
+							],
+							"query": [
+								{
+									"key": "x-auth-token",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/all/634535013fc1e00d43d27cf3?pageNo=1&size=3",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"all",
+								"634535013fc1e00d43d27cf3"
+							],
+							"query": [
+								{
+									"key": "pageNo",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single post",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/634548906488cfd84d656673",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"634548906488cfd84d656673"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit post",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Playing cricket now..\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/634548906488cfd84d656673",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"634548906488cfd84d656673"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete post",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/6345484e6488cfd84d656670",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"6345484e6488cfd84d656670"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like post",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/like/634548906488cfd84d656673",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"like",
+								"634548906488cfd84d656673"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dislike post",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/post/dislike/634548906488cfd84d656673",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"post",
+								"dislike",
+								"634548906488cfd84d656673"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"guptil@gmail.com\",\n    \"password\": \"123456\",\n    \"fname\":\"Martin\",\n    \"lname\": \"Guptil\",\n    \"phoneNo\": \"+923041234565\",\n    \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/auth/register",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"guptil@gmail.com\",\n    \"password\": \"123456\",\n    \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/auth/login",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "feed",
+			"item": [
+				{
+					"name": "show social feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/feed?pageNo=1&size=3&sortBy=title&order=desc",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"feed"
+							],
+							"query": [
+								{
+									"key": "pageNo",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sortBy",
+									"value": "title"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "Payment for feed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDUzNTAxM2ZjMWUwMGQ0M2QyN2NmMyIsImVtYWlsIjoiZ3VwdGlsQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY1NDg0ODYwLCJleHAiOjE2NjU1MDI4NjB9.d0oKAYpt2FfrmyE1EIq14WWbd9sLIOlbtfZqwZuIaOA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://nestjs-social-media-app.herokuapp.com/payment",
+							"protocol": "https",
+							"host": [
+								"nestjs-social-media-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
